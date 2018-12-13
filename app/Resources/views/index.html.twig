@@ -1,0 +1,29 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <div class="container">
+        <div class="py-5 text-center">
+            <h2>City Weather</h2>
+        </div>
+
+      <div class="row">
+        <div class="col-md-3"></div>
+        <div class="col-md-6">
+            <form action="/weather" method="get">
+                <div class="row">
+                    <div class="col-md-7 mb-3">
+                        <input type="text" class="form-control form-control-lg" id="city" placeholder="type the name of the city">
+                    </div>
+                    <div class="col-md-5 mb-3">
+                        <button class="btn btn-lg btn-info" disabled>
+                            Check Weather
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div class="col-md-3"></div>
+      </div>
+    </div>
+{% endblock %}
+
