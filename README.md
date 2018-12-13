@@ -1,4 +1,6 @@
 # city-weather
+[![Build Status](https://travis-ci.org/harryandriyan/city-weather.svg?branch=master)](https://travis-ci.org/harryandriyan/city-weather)  
+
 nearby city’s weather
 
 ## Configuration
