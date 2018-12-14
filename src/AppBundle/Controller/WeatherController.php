@@ -46,7 +46,7 @@ class WeatherController extends Controller
     protected function getNearCityWeather($lat, $lon)
     {
         $client = new Client();
-        $uri = 'http://api.openweathermap.org/data/2.5/find?lat='.$lat.'&lon='.$lon.'&cnt=16&units=metric&appid=5817b972e7e6c3386e8c3e0d4d937f9a';
+        $uri = 'http://api.openweathermap.org/data/2.5/find?lat='.$lat.'&lon='.$lon.'&cnt=21&units=metric&appid=5817b972e7e6c3386e8c3e0d4d937f9a';
         $response = $client->request('GET', $uri);
 
         $near_weather = [];
