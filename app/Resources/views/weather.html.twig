@@ -8,8 +8,7 @@
         </div>
 
       <div class="row">
-        <div class="col-md-1"></div>
-        <div class="col-md-7">
+        <div class="col-md-8">
             <div id="mapid"></div>
         </div>
         <div class="col-md-3">
@@ -47,6 +46,38 @@
             </div>
         </div>
         <div class="col-md-1"></div>
+      </div>
+      <div class="row">
+        <h3>Nearby City</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>City</th>
+                    <th>Wind</th>
+                    <th>Pressure</th>
+                    <th>Humidity</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% set num = 1 %}
+            {% for weather in near_weather %}
+                <tr>
+                    <td>{{ num }}</td>
+                    <td>
+                        <img src="https://openweathermap.org/img/w/{{ weather.weather[0].icon }}.png" />
+                        <br /><a href="/weather?city={{ weather.name }}">{{ weather.name }}</a>
+                        <br />{{ city_weather.weather[0].main }}
+                        <br/ >{{ city_weather.main.temp }}°C
+                    </td>
+                    <td>{{ weather.wind.speed }} m/s | {{ weather.wind.deg }}°</td>
+                    <td>{{ weather.main.pressure }} m/s</td>
+                    <td>{{ weather.main.humidity }} %</td>
+                </tr>
+            {% set num = num + 1 %}
+            {% endfor %}
+            </tbody>
+        </table>
       </div>
     </div>
     {% block stylesheets %}
@@ -87,6 +118,20 @@
             var infoPopup = $("#main-weather-info").html();
             L.marker([lat,lon]).addTo(mymap)
                 .bindPopup(infoPopup).openPopup();
+            var coord_near = [
+                {% for weather in near_weather %}
+                ['<img src="https://openweathermap.org/img/w/{{ weather.weather[0].icon }}.png" />'+
+                '<h2>{{ weather.name }}</h4>'+
+                '<h4>{{ weather.weather[0].main }}</h4>'+
+                '<h3>{{ weather.main.temp }}°C</h3>',
+                {{ weather.coord.lat }}, {{ weather.coord.lon }}],
+                {% endfor %}
+            ];
+            for (var i = 0; i < coord_near.length; i++) {
+                marker = new L.marker([coord_near[i][1],coord_near[i][2]])
+                    .bindPopup(coord_near[i][0])
+                    .addTo(mymap);
+            }
         </script>
     {% endblock %}
 {% endblock %}
