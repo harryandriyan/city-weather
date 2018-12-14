@@ -6,16 +6,15 @@ nearby city’s weather
 ![picture](https://res.cloudinary.com/hamharry/image/upload/v1544779974/city-weather_1_mb1zhd.png)
 
 ## Configuration
-
-
-## Usefull Console Command
 ```
+Clone Repo
+git clone https://github.com/harryandriyan/city-weather.git
+
+Change directory and install dependencies
+cd city-weather
+composer install
+
 Run app
 php bin/console server:run
-
-Create Controller
-php bin/console generate:controller
-
-Create Entity
-php bin/console generate:doctrine:entity
 ```
+
