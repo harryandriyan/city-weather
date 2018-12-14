@@ -3,6 +3,8 @@
 
 nearby city’s weather
 
+![picture](https://res.cloudinary.com/hamharry/image/upload/v1544779974/city-weather_1_mb1zhd.png)
+
 ## Configuration
 
 
