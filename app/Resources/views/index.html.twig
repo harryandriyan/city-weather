@@ -3,7 +3,8 @@
 {% block body %}
     <div class="container">
         <div class="py-5 text-center">
-            <h2>City Weather</h2>
+            <a href="/"><h2>City Weather</h2></a>
+            <p>Search Weather Information in Australia</p>
         </div>
 
       <div class="row">
@@ -12,10 +13,12 @@
             <form action="/weather" method="get">
                 <div class="row">
                     <div class="col-md-7 mb-3">
-                        <input type="text" class="form-control form-control-lg" id="city" placeholder="type the name of the city">
+                        <div class="autocomplete">
+                            <input id="city" class="form-control form-control-lg" type="text" name="city" placeholder="Type name of City">
+                        </div>
                     </div>
                     <div class="col-md-5 mb-3">
-                        <button class="btn btn-lg btn-info" disabled>
+                        <button class="btn btn-lg btn-info">
                             Check Weather
                         </button>
                     </div>
@@ -24,32 +27,137 @@
         </div>
         <div class="col-md-3"></div>
       </div>
-      <div class="row">
-        <div class="col-md-12" id="mapid"></div>
-      </div>
     </div>
+    <style>
+        * {
+            box-sizing: border-box;
+        }
 
-    {% block stylesheets %}
-        <link href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.css" rel="stylesheet">
-        <style>
-            #mapid { height: 500px; }
+        /*the container must be positioned relative:*/
+        .autocomplete {
+        position: relative;
+        display: inline-block;
+        }
+
+        input {
+        border: 1px solid transparent;
+        background-color: #f1f1f1;
+        padding: 10px;
+        font-size: 16px;
+        }
+
+        input[type=text] {
+        background-color: #f1f1f1;
+        width: 100%;
+        }
+
+        input[type=submit] {
+        background-color: DodgerBlue;
+        color: #fff;
+        cursor: pointer;
+        }
+
+        .autocomplete-items {
+        position: absolute;
+        border: 1px solid #d4d4d4;
+        border-bottom: none;
+        border-top: none;
+        z-index: 99;
+        /*position the autocomplete items to be the same width as the container:*/
+        top: 100%;
+        left: 0;
+        right: 0;
+        }
+
+        .autocomplete-items div {
+        padding: 10px;
+        cursor: pointer;
+        background-color: #fff; 
+        border-bottom: 1px solid #d4d4d4; 
+        }
+
+        /*when hovering an item:*/
+        .autocomplete-items div:hover {
+        background-color: #e9e9e9; 
+        }
+
+        /*when navigating through the items using the arrow keys:*/
+        .autocomplete-active {
+        background-color: DodgerBlue !important; 
+        color: #ffffff; 
+        }
         </style>
-    {% endblock %}
+
     {% block javascript %}
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.js"></script>
         <script>
-            var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+            var cities = {{(cities|json_encode|raw)}};
+            function autocomplete(inp, arr) {
+                var currentFocus;
+                inp.addEventListener("input", function(e) {
+                    var a, b, i, val = this.value;
+                    closeAllLists();
+                    if (!val) { return false;}
+                    currentFocus = -1;
+                    a = document.createElement("DIV");
+                    a.setAttribute("id", this.id + "autocomplete-list");
+                    a.setAttribute("class", "autocomplete-items");
+                    this.parentNode.appendChild(a);
+                    for (i = 0; i < arr.length; i++) {
+                        if (arr[i].city.substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+                            b = document.createElement("DIV");
+                            b.innerHTML = "<strong>" + arr[i].city.substr(0, val.length) + "</strong>";
+                            b.innerHTML += arr[i].city.substr(val.length);
+                            b.innerHTML += "<input type='hidden' value='" + arr[i].city + "'>";
+                            b.addEventListener("click", function(e) {
+                                inp.value = this.getElementsByTagName("input")[0].value;
+                                closeAllLists();
+                            });
+                            a.appendChild(b);
+                        }
+                    }
+                });
 
-            L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
-                maxZoom: 18,
-                attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, ' +
-                    '<a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>, ' +
-                    'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
-                id: 'mapbox.streets'
-            }).addTo(mymap);
-
-            L.marker([51.5, -0.09]).addTo(mymap)
-                .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+                inp.addEventListener("keydown", function(e) {
+                    var x = document.getElementById(this.id + "autocomplete-list");
+                    if (x) x = x.getElementsByTagName("div");
+                    if (e.keyCode == 40) {
+                        currentFocus++;
+                        addActive(x);
+                    } else if (e.keyCode == 38) {
+                        currentFocus--;
+                        addActive(x);
+                    } else if (e.keyCode == 13) {
+                        e.preventDefault();
+                        if (currentFocus > -1) {
+                        if (x) x[currentFocus].click();
+                        }
+                    }
+                });
+                function addActive(x) {
+                    if (!x) return false;
+                    removeActive(x);
+                    if (currentFocus >= x.length) currentFocus = 0;
+                    if (currentFocus < 0) currentFocus = (x.length - 1);
+                    x[currentFocus].classList.add("autocomplete-active");
+                }
+                function removeActive(x) {
+                    for (var i = 0; i < x.length; i++) {
+                    x[i].classList.remove("autocomplete-active");
+                    }
+                }
+                function closeAllLists(elmnt) {
+                    var x = document.getElementsByClassName("autocomplete-items");
+                    for (var i = 0; i < x.length; i++) {
+                    if (elmnt != x[i] && elmnt != inp) {
+                        x[i].parentNode.removeChild(x[i]);
+                    }
+                    }
+                }
+                document.addEventListener("click", function (e) {
+                    closeAllLists(e.target);
+                });
+            }
+            autocomplete(document.getElementById("city"), cities);
         </script>
     {% endblock %}
 {% endblock %}

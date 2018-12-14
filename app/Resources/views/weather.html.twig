@@ -3,36 +3,50 @@
 {% block body %}
     <div class="container">
         <div class="py-5 text-center">
-            <h2>City Weather</h2>
+            <a href="/"><h2>City Weather</h2></a>
+            <p>Search Weather Information in Australia</p>
         </div>
 
       <div class="row">
-        <div class="col-md-2"></div>
-        <div class="col-md-4">
+        <div class="col-md-1"></div>
+        <div class="col-md-7">
             <div id="mapid"></div>
         </div>
-        <div class="col-md-4">
-            <h2>Sydney</h4>
-            <h4>Snow, Hard Snow</h4>
-            <h3>24°C</h3>
-            <table class="table">
-                <tbody>
-                    <tr>
-                        <td>Wind</td>
-                        <td>5m/s | 67°</td>
-                    </tr>
-                    <tr>
-                        <td>Pressure</td>
-                        <td>1010</td>
-                    </tr>
-                    <tr>
-                        <td>Humidity</td>
-                        <td>62</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="col-md-3">
+            <div id="main-weather-info">
+                <img src="https://openweathermap.org/img/w/{{ city_weather.weather[0].icon }}.png" />
+                <h2>{{ city_weather.name }}</h4>
+                <h4>{{ city_weather.weather[0].main }}</h4>
+                <h3>{{ city_weather.main.temp }}°C</h3>
+            </div>
+            <div id="detail-weather-info">
+                <table class="table">
+                    <tbody>
+                        <tr>
+                            <td>Wind</td>
+                            <td>{{ city_weather.wind.speed }}m/s | {{ city_weather.wind.deg }}°</td>
+                        </tr>
+                        <tr>
+                            <td>Pressure</td>
+                            <td>{{ city_weather.main.pressure }} hpa</td>
+                        </tr>
+                        <tr>
+                            <td>Humidity</td>
+                            <td>{{ city_weather.main.humidity }} %</td>
+                        </tr>
+                        <tr>
+                            <td>Sunrise</td>
+                            <td id="sunrise"></td>
+                        </tr>
+                        <tr>
+                            <td>Sunset</td>
+                            <td id="sunset"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
-        <div class="col-md-2"></div>
+        <div class="col-md-1"></div>
       </div>
     </div>
     {% block stylesheets %}
@@ -44,7 +58,24 @@
     {% block javascript %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.3.4/leaflet.js"></script>
         <script>
-            var mymap = L.map('mapid').setView([51.505, -0.09], 13);
+            function convert_time (time, elm) {
+                var date = new Date(time*1000);
+                var hours = date.getHours();
+                var minutes = "0" + date.getMinutes();
+                var seconds = "0" + date.getSeconds();
+
+                var formattedTime = hours + ':' + minutes.substr(-2) + ':' + seconds.substr(-2);
+                $("#"+elm).html(formattedTime)
+            }
+            var sunrise = {{ city_weather.sys.sunrise }};
+            var sunset = {{ city_weather.sys.sunset }};
+
+            convert_time(sunrise, 'sunrise');
+            convert_time(sunset, 'sunset');
+
+            var lat = {{ city_weather.coord.lat }};
+            var lon = {{ city_weather.coord.lon }};
+            var mymap = L.map('mapid').setView([lat,lon], 10);
 
             L.tileLayer('https://api.tiles.mapbox.com/v4/{id}/{z}/{x}/{y}.png?access_token=pk.eyJ1IjoibWFwYm94IiwiYSI6ImNpejY4NXVycTA2emYycXBndHRqcmZ3N3gifQ.rJcFIG214AriISLbB6B5aw', {
                 maxZoom: 18,
@@ -53,9 +84,9 @@
                     'Imagery © <a href="https://www.mapbox.com/">Mapbox</a>',
                 id: 'mapbox.streets'
             }).addTo(mymap);
-
-            L.marker([51.5, -0.09]).addTo(mymap)
-                .bindPopup("<b>Hello world!</b><br />I am a popup.").openPopup();
+            var infoPopup = $("#main-weather-info").html();
+            L.marker([lat,lon]).addTo(mymap)
+                .bindPopup(infoPopup).openPopup();
         </script>
     {% endblock %}
 {% endblock %}
