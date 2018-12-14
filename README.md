@@ -13,6 +13,7 @@ git clone https://github.com/harryandriyan/city-weather.git
 Change directory and install dependencies
 cd city-weather
 composer install
+composer require guzzlehttp/guzzle
 
 Run app
 php bin/console server:run

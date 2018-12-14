@@ -7,6 +7,7 @@ use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\HttpFoundation\Request;
 use GuzzleHttp\Client;
 
+
 class WeatherController extends Controller
 {
     /**
