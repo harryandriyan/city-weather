@@ -1,0 +1,5 @@
+parameters:
+
+services:
+    get.weather:
+        class: CW\WeatherBundle\Service\WeatherService

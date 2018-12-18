@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Service;
+namespace CW\WeatherBundle\Service;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
