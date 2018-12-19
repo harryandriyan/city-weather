@@ -8,6 +8,6 @@ before_script:
   - composer require guzzlehttp/guzzle
   - echo -e "[server]\nwait_timeout=28800" | sudo tee -a /etc/mysql/my.cnf
   - sudo service mysql restart
-  - mysql -e "CREATE DATABASE IF NOT EXISTS symfony;"
-  - mysql -e "use symfony";
+  - mysql -e "CREATE DATABASE IF NOT EXISTS city_weather;"
+  - mysql -e "use city_weather";
   - mysql -e "CREATE TABLE city (id INT, city VARCHAR(100));"
