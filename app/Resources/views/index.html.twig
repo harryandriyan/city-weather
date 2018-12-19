@@ -24,10 +24,12 @@
                     </div>
                 </div>
             </form>
-            
-            {% for city in popular_city %}
-                <a href="/weather?city={{city.city}}" class="btn btn-light">{{city.city}}</a>
-            {% endfor %}
+            <a href="/weather?city=Sydney" class="btn btn-light">Sydney</a>
+            <a href="/weather?city=Melbourne" class="btn btn-light">Melbourne</a>
+            <a href="/weather?city=Brisbane" class="btn btn-light">Brisbane</a>
+            <a href="/weather?city=Adelaide" class="btn btn-light">Adelaide</a>
+            <a href="/weather?city=Perth" class="btn btn-light">Perth</a>
+            <a href="/weather?city=Cairns" class="btn btn-light">Cairns</a>
             
         </div>
         <div class="col-md-3"></div>

@@ -23,12 +23,8 @@ class DefaultController extends Controller
             ->getQuery();
         $cities = $query->getResult(Query::HYDRATE_ARRAY);
 
-        $popular = file_get_contents($base_dir . "web/popular_city.json");
-        $popularCities = json_decode($popular, true)['pop_city'];
-
         return $this->render('index.html.twig', [
             'cities' => $cities,
-            'popular_city' => $popularCities,
             'base_dir' => $base_dir
         ]);
     }
