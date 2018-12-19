@@ -1,0 +1,28 @@
+{
+  "pop_city": [
+    {
+      "id": "1",
+      "city": "Sydney"
+    },
+    {
+      "id": "2",
+      "city": "Melbourne"
+    },
+    {
+      "id": "3",
+      "city": "Brisbane"
+    },
+    {
+      "id": "4",
+      "city": "Adelaide"
+    },
+    {
+      "id": "5",
+      "city": "Perth"
+    },
+    {
+      "id": "6",
+      "city": "Cairns"
+    }
+  ]
+}

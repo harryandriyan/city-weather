@@ -19,6 +19,13 @@ composer install
 composer require guzzlehttp/guzzle
 ```
 
+### Database Configuration
+```
+Config your database in app/config/parameters.yml
+php bin/console doctrine:database:create
+
+```
+
 ### Run app
 ```
 php bin/console server:run
