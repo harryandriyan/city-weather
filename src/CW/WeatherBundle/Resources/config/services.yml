@@ -1,5 +1,4 @@
-parameters:
-
 services:
     get.weather:
         class: CW\WeatherBundle\Service\WeatherService
+        arguments: [ "@doctrine.orm.weather_entity_manager" ]

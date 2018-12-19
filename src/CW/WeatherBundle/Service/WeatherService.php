@@ -5,9 +5,33 @@ namespace CW\WeatherBundle\Service;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use GuzzleHttp\Client;
+use Doctrine\ORM\EntityManager;
 
 class WeatherService
 {
+    private $entityManager;
+
+    public function __construct(EntityManager $entityManager)
+    {
+        $this->entityManager = $entityManager;
+    }
+
+    public function getCity()
+    {
+        $entityManager = $this->entityManager->getManager();
+        $cities = $entityManager->getRepository("WeatherBundle:City")->findAll();
+        $listCity = [];
+
+        foreach ($cities as $list) {
+            $listCity[] = [
+                'id' => $list->getId(),
+                'city' => $list->getCity()
+            ];
+        }
+
+        return $listCity;
+    }
+
     public function getWeather($city)
     {
         $client = new Client();

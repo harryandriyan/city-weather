@@ -14,19 +14,21 @@ class DefaultController extends Controller
     public function indexAction(Request $request)
     {
         $base_dir = realpath($this->getParameter('kernel.project_dir')).DIRECTORY_SEPARATOR;
-        $em = $this->get('doctrine')->getManager();
-        $cities = $em->getRepository("AppBundle:City")->findAll();
-        $listCity = [];
+        // $em = $this->get('doctrine')->getManager();
+        // $cities = $em->getRepository("WeatherBundle:City")->findAll();
+        // $listCity = [];
 
-        foreach ($cities as $list) {
-            $listCity[] = [
-                'id' => $list->getId(),
-                'city' => $list->getCity()
-            ];
-        }
+        // foreach ($cities as $list) {
+        //     $listCity[] = [
+        //         'id' => $list->getId(),
+        //         'city' => $list->getCity()
+        //     ];
+        // }
+        $weatherService = $this->get('get.weather');
+        $city = $weatherService->getCity();
 
         return $this->render('index.html.twig', [
-            'cities' => $listCity,
+            'cities' => $city,
             'base_dir' => $base_dir
         ]);
     }

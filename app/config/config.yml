@@ -68,12 +68,11 @@ doctrine:
         #path: '%database_path%'
 
     orm:
-        default_entity_manager: default
+        default_entity_manager: weather_entity_manager
         entity_managers:
-            default:
+            weather_entity_manager:
                 connection: mysql
                 mappings:
-                    AppBundle: ~
                     WeatherBundle: ~
 
 # Swiftmailer Configuration
