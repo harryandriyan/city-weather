@@ -24,6 +24,10 @@ composer require guzzlehttp/guzzle
 Config your database in app/config/parameters.yml
 php bin/console doctrine:database:create
 
+Update Schema
+php bin/console doctrine:schema:update --force
+
+And then manualy  import sql insert data from ./database/city.sql
 ```
 
 ### Run app
