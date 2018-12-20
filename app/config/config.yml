@@ -68,9 +68,9 @@ doctrine:
         #path: '%database_path%'
 
     orm:
-        default_entity_manager: weather_entity_manager
+        default_entity_manager: weather
         entity_managers:
-            weather_entity_manager:
+            weather:
                 connection: mysql
                 mappings:
                     WeatherBundle: ~

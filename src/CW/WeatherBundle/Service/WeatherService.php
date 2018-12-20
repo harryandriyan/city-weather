@@ -18,7 +18,7 @@ class WeatherService
 
     public function getCity()
     {
-        $entityManager = $this->entityManager->getManager();
+        $entityManager = $this->entityManager;
         $cities = $entityManager->getRepository("WeatherBundle:City")->findAll();
         $listCity = [];
 
